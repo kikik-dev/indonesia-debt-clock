@@ -1,0 +1,221 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&display=swap');
+  
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  body { font-family: var(--font-sans); }
+
+  .wrap { padding: 1.5rem 0; }
+
+  .header { margin-bottom: 2rem; }
+  .header h1 { font-family: 'DM Serif Display', serif; font-size: 26px; font-weight: 400; font-style: italic; color: var(--color-text-primary); line-height: 1.2; margin-bottom: 6px; }
+  .header p { font-size: 13px; color: var(--color-text-secondary); }
+
+  .era-ticker { background: var(--color-background-secondary); border-radius: var(--border-radius-lg); padding: 1rem 1.25rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 16px; border: 0.5px solid var(--color-border-tertiary); }
+  .era-ticker .label { font-size: 12px; color: var(--color-text-secondary); flex-shrink: 0; }
+  .era-ticker .value { font-family: 'DM Mono', monospace; font-size: 22px; font-weight: 500; color: var(--color-text-primary); }
+  .era-ticker .sub { font-size: 12px; color: var(--color-text-secondary); margin-left: auto; text-align: right; }
+  .era-ticker .dot { width: 8px; height: 8px; border-radius: 50%; background: #E24B4A; animation: pulse 1s infinite; flex-shrink: 0; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  .metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-bottom: 1.5rem; }
+  .metric { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 0.75rem 1rem; }
+  .metric .mlabel { font-size: 11px; color: var(--color-text-secondary); margin-bottom: 4px; }
+  .metric .mval { font-size: 18px; font-weight: 500; color: var(--color-text-primary); font-family: 'DM Mono', monospace; }
+  .metric .msub { font-size: 11px; color: var(--color-text-tertiary); margin-top: 2px; }
+
+  .section-title { font-size: 11px; font-weight: 500; color: var(--color-text-secondary); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.75rem; }
+
+  .chart-wrap { position: relative; width: 100%; height: 280px; margin-bottom: 1.5rem; }
+
+  .timeline { margin-bottom: 1.5rem; }
+  .era-row { display: flex; align-items: stretch; gap: 10px; padding: 10px 0; border-bottom: 0.5px solid var(--color-border-tertiary); cursor: pointer; transition: background 0.15s; border-radius: 6px; padding-left: 8px; }
+  .era-row:hover { background: var(--color-background-secondary); }
+  .era-row.active { background: var(--color-background-secondary); }
+  .era-bar-col { width: 4px; border-radius: 2px; flex-shrink: 0; }
+  .era-info { flex: 1; min-width: 0; }
+  .era-name { font-size: 13px; font-weight: 500; color: var(--color-text-primary); }
+  .era-period { font-size: 11px; color: var(--color-text-secondary); }
+  .era-nums { text-align: right; flex-shrink: 0; }
+  .era-debt { font-size: 13px; font-weight: 500; font-family: 'DM Mono', monospace; color: var(--color-text-primary); }
+  .era-pdb { font-size: 11px; color: var(--color-text-secondary); }
+
+  .prediction-box { border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1rem 1.25rem; margin-bottom: 1rem; }
+  .pred-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; }
+  .pred-title { font-size: 13px; font-weight: 500; color: var(--color-text-primary); }
+  .pred-badge { font-size: 11px; background: var(--color-background-warning); color: var(--color-text-warning); padding: 2px 8px; border-radius: 100px; }
+  .pred-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .pred-card { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 0.75rem; }
+  .pred-year { font-size: 11px; color: var(--color-text-secondary); }
+  .pred-val { font-size: 15px; font-weight: 500; font-family: 'DM Mono', monospace; color: var(--color-text-primary); }
+  .pred-pdb { font-size: 11px; color: var(--color-text-tertiary); }
+
+  .footnote { font-size: 11px; color: var(--color-text-tertiary); padding-top: 0.5rem; border-top: 0.5px solid var(--color-border-tertiary); line-height: 1.6; }
+</style>
+
+<div class="wrap">
+  <div class="header">
+    <h1>Sejarah Utang<br>Pemerintah Indonesia</h1>
+    <p>Era Soekarno hingga proyeksi ke depan &nbsp;·&nbsp; Dalam Rp Triliun</p>
+  </div>
+
+  <div class="era-ticker">
+    <div class="dot"></div>
+    <div class="label">Posisi utang<br>saat ini</div>
+    <div>
+      <div class="value" id="live-val">Rp 9.637,90 T</div>
+    </div>
+    <div class="sub">
+      <span id="live-rasio">40,46%</span> terhadap PDB<br>
+      <span id="live-era">Era Prabowo &nbsp;·&nbsp; 2025</span>
+    </div>
+  </div>
+
+  <div class="metrics">
+    <div class="metric">
+      <div class="mlabel">Kenaikan terbesar</div>
+      <div class="mval">+220%</div>
+      <div class="msub">Era Jokowi</div>
+    </div>
+    <div class="metric">
+      <div class="mlabel">Rasio PDB tertinggi</div>
+      <div class="mval">85,4%</div>
+      <div class="msub">Era Habibie</div>
+    </div>
+    <div class="metric">
+      <div class="mlabel">Rasio PDB terendah</div>
+      <div class="mval">24,7%</div>
+      <div class="msub">Era SBY</div>
+    </div>
+  </div>
+
+  <div class="section-title">Tren utang per era (Rp Triliun)</div>
+  <div class="chart-wrap">
+    <canvas id="mainChart"></canvas>
+  </div>
+
+  <div class="section-title">Rincian per era</div>
+  <div class="timeline" id="timeline"></div>
+
+  <div class="section-title" style="margin-top:1.5rem;">Proyeksi utang ke depan</div>
+  <div class="prediction-box">
+    <div class="pred-header">
+      <div class="pred-title">Estimasi pertumbuhan (model linear-trend)</div>
+      <div class="pred-badge">Proyeksi</div>
+    </div>
+    <div class="pred-grid" id="pred-grid"></div>
+  </div>
+
+  <div class="footnote">
+    * Proyeksi menggunakan rata-rata kenaikan tahunan 3 tahun terakhir ±12–15% per tahun. Angka proyeksi bersifat indikatif. Utang era Soekarno dikonversi ke nilai nominal. Data per Mei 2024 untuk Jokowi dan Desember 2025 untuk Prabowo.
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const eras = [
+  { name: 'Soekarno', period: '1945–1966', debt: 0.794, pdb: 29.0, color: '#3266ad' },
+  { name: 'Soeharto', period: '1966–1998', debt: 551.4, pdb: 57.7, color: '#5DCAA5' },
+  { name: 'BJ Habibie', period: '1998–1999', debt: 938.8, pdb: 85.4, color: '#E24B4A' },
+  { name: 'Abdurrahman Wahid', period: '1999–2001', debt: 1271.4, pdb: 77.2, color: '#D85A30' },
+  { name: 'Megawati', period: '2001–2004', debt: 1298.0, pdb: 56.5, color: '#7F77DD' },
+  { name: 'SBY', period: '2004–2014', debt: 2608.8, pdb: 24.7, color: '#1D9E75' },
+  { name: 'Joko Widodo', period: '2014–2024', debt: 8353.02, pdb: null, color: '#BA7517' },
+  { name: 'Prabowo*', period: '2024–', debt: 9637.90, pdb: 40.46, color: '#A32D2D' },
+];
+
+const tl = document.getElementById('timeline');
+const barColors = eras.map(e => e.color);
+
+eras.forEach((e, i) => {
+  const row = document.createElement('div');
+  row.className = 'era-row';
+  row.innerHTML = `
+    <div class="era-bar-col" style="background:${e.color}"></div>
+    <div class="era-info">
+      <div class="era-name">${e.name}</div>
+      <div class="era-period">${e.period}</div>
+    </div>
+    <div class="era-nums">
+      <div class="era-debt">${e.debt >= 1000 ? 'Rp ' + e.debt.toLocaleString('id-ID') + ' T' : e.debt < 1 ? 'Rp 794 M' : 'Rp ' + e.debt.toLocaleString('id-ID') + ' T'}</div>
+      <div class="era-pdb">${e.pdb != null ? e.pdb + '% PDB' : '± 38% PDB'}</div>
+    </div>
+  `;
+  tl.appendChild(row);
+});
+
+const chartData = eras.map(e => e.debt < 1 ? 0.001 : e.debt);
+
+const ctx = document.getElementById('mainChart').getContext('2d');
+new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: eras.map(e => e.name.split(' ')[0]),
+    datasets: [{
+      data: chartData,
+      backgroundColor: barColors,
+      borderRadius: 4,
+      borderSkipped: false,
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: (ctx) => {
+            const v = ctx.raw;
+            if (v < 1) return 'Rp 794 Miliar';
+            return 'Rp ' + v.toLocaleString('id-ID', {minimumFractionDigits:0}) + ' T';
+          }
+        }
+      }
+    },
+    scales: {
+      x: {
+        grid: { display: false },
+        ticks: { font: { size: 11 }, color: '#888' }
+      },
+      y: {
+        grid: { color: 'rgba(128,128,128,0.1)' },
+        ticks: {
+          font: { size: 11 }, color: '#888',
+          callback: v => v >= 1000 ? (v/1000).toFixed(0) + 'rb T' : v + ' T'
+        }
+      }
+    }
+  }
+});
+
+const predictions = [
+  { year: 2026, val: 10794, pdb: 42.5 },
+  { year: 2027, val: 12089, pdb: 43.8 },
+  { year: 2028, val: 13540, pdb: 44.9 },
+  { year: 2029, val: 15165, pdb: 45.8 },
+];
+
+const pg = document.getElementById('pred-grid');
+predictions.forEach(p => {
+  const c = document.createElement('div');
+  c.className = 'pred-card';
+  c.innerHTML = `
+    <div class="pred-year">${p.year}</div>
+    <div class="pred-val">Rp ${p.val.toLocaleString('id-ID')} T</div>
+    <div class="pred-pdb">~${p.pdb}% terhadap PDB</div>
+  `;
+  pg.appendChild(c);
+});
+
+let base = 9637.90;
+let count = base * 1e12;
+const perSec = (base * 0.13 * 1e12) / (365 * 24 * 3600);
+const el = document.getElementById('live-val');
+setInterval(() => {
+  count += perSec / 10;
+  const triliun = count / 1e12;
+  el.textContent = 'Rp ' + triliun.toLocaleString('id-ID', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' T';
+}, 100);
+</script>
