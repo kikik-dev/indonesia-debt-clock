@@ -1,16 +1,28 @@
+import { LangProvider, useLang } from './LangContext'
 import DebtTicker from './components/DebtTicker'
 import Metrics from './components/Metrics'
 import DebtChart from './components/DebtChart'
 import Timeline from './components/Timeline'
 import Predictions from './components/Predictions'
-
 import './index.css'
 
-export default function App() {
+function LangToggle() {
+  const { lang, toggle } = useLang()
+  return (
+    <button className="lang-toggle" onClick={toggle} aria-label="Switch language">
+      <span className={lang === 'id' ? 'lang-active' : ''}>ID</span>
+      <span className="lang-sep">/</span>
+      <span className={lang === 'en' ? 'lang-active' : ''}>EN</span>
+    </button>
+  )
+}
+
+function Inner() {
+  const { t } = useLang()
   return (
     <div className="app">
       <div className="bg-grid" />
-
+      <LangToggle />
 
       <DebtTicker />
 
@@ -21,17 +33,18 @@ export default function App() {
         <Predictions />
 
         <footer className="foot">
-          <p>
-            * Proyeksi menggunakan rata-rata kenaikan tahunan 3 tahun terakhir
-            &plusmn;12&ndash;15% per tahun. Angka proyeksi bersifat indikatif.
-            Utang era Soekarno dikonversi ke nilai nominal.
-            Data per Mei 2024 untuk Jokowi dan Desember 2025 untuk Prabowo.
-          </p>
-          <p className="foot-credit">
-            Indonesia Debt Clock &middot; Data bersifat edukatif
-          </p>
+          <p>{t.footnote}</p>
+          <p className="foot-credit">{t.credit}</p>
         </footer>
       </main>
     </div>
+  )
+}
+
+export default function App() {
+  return (
+    <LangProvider>
+      <Inner />
+    </LangProvider>
   )
 }

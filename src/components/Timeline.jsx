@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { eras } from '../data/eras'
+import { useLang } from '../LangContext'
 
 function fmtDebt(d) {
   if (d < 1) return 'Rp 794 M'
@@ -7,14 +8,15 @@ function fmtDebt(d) {
 }
 
 export default function Timeline() {
+  const { t } = useLang()
   const [active, setActive] = useState(null)
   const maxDebt = Math.max(...eras.map((e) => e.debt))
 
   return (
     <div className="glass-panel">
       <div className="panel-head">
-        <h2 className="panel-title">Rincian per Era</h2>
-        <span className="panel-sub">{eras.length} periode kepresidenan</span>
+        <h2 className="panel-title">{t.timelineTitle}</h2>
+        <span className="panel-sub">{t.timelineSub(eras.length)}</span>
       </div>
       <div className="tl">
         {eras.map((e, i) => {
@@ -36,7 +38,7 @@ export default function Timeline() {
                 </div>
                 <div className="tl-bottom">
                   <span className="tl-period">{e.period}</span>
-                  <span className="tl-pdb">{e.pdb != null ? e.pdb + '% PDB' : '~38% PDB'}</span>
+                  <span className="tl-pdb">{e.pdb != null ? e.pdb + t.gdpLabel : '~38' + t.gdpLabel}</span>
                 </div>
               </div>
             </div>

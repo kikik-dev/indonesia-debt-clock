@@ -42,6 +42,43 @@ body {
 
 .app { position: relative; z-index: 1; }
 
+/* ── Language Toggle ────────────────────────────────────── */
+.lang-toggle {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  background: rgba(255,255,255,0.85);
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 100px;
+  padding: 6px 14px;
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  backdrop-filter: blur(12px);
+  transition: background 0.2s, box-shadow 0.2s;
+  color: rgba(0,0,0,0.35);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+
+.lang-toggle:hover {
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.lang-sep {
+  margin: 0 2px;
+  opacity: 0.3;
+}
+
+.lang-active {
+  color: var(--t1);
+}
+
 /* ══════════════════════════════════════════════════════════
    HERO — fullscreen counter
    ══════════════════════════════════════════════════════════ */

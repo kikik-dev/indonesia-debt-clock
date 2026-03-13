@@ -8,10 +8,13 @@ import {
 } from 'chart.js'
 import { Bar } from 'react-chartjs-2'
 import { eras } from '../data/eras'
+import { useLang } from '../LangContext'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip)
 
 export default function DebtChart() {
+  const { t, lang } = useLang()
+
   const data = useMemo(() => ({
     labels: eras.map((e) => e.name.split(' ')[0]),
     datasets: [{
@@ -40,8 +43,8 @@ export default function DebtChart() {
         callbacks: {
           label: (ctx) => {
             const v = ctx.raw
-            if (v < 1) return 'Rp 794 Miliar'
-            return 'Rp ' + v.toLocaleString('id-ID', { minimumFractionDigits: 0 }) + ' Triliun'
+            if (v < 1) return 'Rp 794 ' + t.chartBillion
+            return 'Rp ' + v.toLocaleString('id-ID', { minimumFractionDigits: 0 }) + ' ' + t.chartTrillion
           },
         },
       },
@@ -62,13 +65,13 @@ export default function DebtChart() {
         },
       },
     },
-  }), [])
+  }), [lang, t])
 
   return (
     <div className="glass-panel">
       <div className="panel-head">
-        <h2 className="panel-title">Tren Utang per Era</h2>
-        <span className="panel-sub">Dalam Rp Triliun</span>
+        <h2 className="panel-title">{t.chartTitle}</h2>
+        <span className="panel-sub">{t.chartSub}</span>
       </div>
       <div className="chart-area">
         <Bar data={data} options={opts} />

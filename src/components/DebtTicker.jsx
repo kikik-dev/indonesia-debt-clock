@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback, useRef } from 'react'
 import RollingDigit from './RollingDigit'
+import { useLang } from '../LangContext'
 
 const POPULATION = 278_800_000
 
@@ -26,6 +27,7 @@ function fmtRupiah(v) {
 }
 
 export default function DebtTicker() {
+  const { t } = useLang()
   const [debt, setDebt] = useState(null)
   const [cfg, setCfg] = useState(null)
   const frameRef = useRef(null)
@@ -72,7 +74,7 @@ export default function DebtTicker() {
     return (
       <section className="hero">
         <div className="hero-inner">
-          <div className="hero-loading">Memuat data utang...</div>
+          <div className="hero-loading">{t.loading}</div>
         </div>
       </section>
     )
@@ -89,7 +91,7 @@ export default function DebtTicker() {
       <div className="hero-inner">
         <div className="hero-badge">
           <span className="live-dot" />
-          LIVE &mdash; Utang Pemerintah Indonesia
+          {t.badge}
         </div>
 
         <div className="counter-block">
@@ -101,29 +103,27 @@ export default function DebtTicker() {
           </div>
         </div>
 
-        <p className="counter-caption">
-          Bertambah &plusmn;Rp 39,7 miliar setiap detik
-        </p>
+        <p className="counter-caption">{t.caption}</p>
 
         <div className="hero-stats">
           <div className="hero-stat">
             <span className="hero-stat-val">{rasio}%</span>
-            <span className="hero-stat-lbl">Rasio PDB</span>
+            <span className="hero-stat-lbl">{t.gdpRatio}</span>
           </div>
           <div className="hero-divider" />
           <div className="hero-stat">
             <span className="hero-stat-val" id="percap" data-cur="0">Rp 0</span>
-            <span className="hero-stat-lbl">Utang per Kapita</span>
+            <span className="hero-stat-lbl">{t.perCapita}</span>
           </div>
           <div className="hero-divider" />
           <div className="hero-stat">
             <span className="hero-stat-val">Prabowo</span>
-            <span className="hero-stat-lbl">Era saat ini</span>
+            <span className="hero-stat-lbl">{t.currentEra}</span>
           </div>
         </div>
 
         <div className="scroll-hint">
-          <span>Scroll untuk detail</span>
+          <span>{t.scrollHint}</span>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
         </div>
       </div>
