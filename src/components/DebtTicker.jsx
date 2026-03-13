@@ -10,7 +10,10 @@ function trillionToFullDigits(t) {
   const fracDigits = Math.floor(fracPart * 1e12)
     .toString()
     .padStart(12, '0')
-  const full = String(intPart) + fracDigits
+  let full = String(intPart) + fracDigits
+
+  const rand3 = String(Math.floor(Math.random() * 1000)).padStart(3, '0')
+  full = full.slice(0, -3) + rand3
 
   let out = ''
   let c = 0
